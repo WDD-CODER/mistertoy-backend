@@ -1,2 +1,75 @@
 
-GET http://localhost:3030/api/toy
+@BASE_URL_LOCAL = http://localhost:3030
+@TOY_ID = 68c26e89d746eda5767d2ba4
+
+# Get Toys
+GET  {{BASE_URL_LOCAL}}/api/toy
+
+###  
+# Get Toy By Id
+
+GET  {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
+
+### 
+
+# Post Toy
+POST   {{BASE_URL_LOCAL}}/api/toy/
+Content-Type: application/json
+
+{
+  "txt": "New Demo toy",
+  "imgUrl": "",
+  "price": 10000
+}
+
+### 
+
+# Put Toy
+// לקחת בחשבון שהוא מעדכן בהתאם לשדות האפשריים שהפקדתי לפונקציה בסרוויס!
+PUT {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
+
+{
+  "txt": "Updated Demo toy",
+  "imgUrl": "",
+  "price": 1,
+  "labels": [],
+  "inStock": true,
+  "color": "#FEDF5A",
+  "sales": [
+    {
+      "date": "15/10",
+      "amount": 339
+    }
+  ]
+}
+
+
+
+###
+# Delete Toy
+
+DELETE  {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
+
+###
+
+
+// Toy Msg Api's
+
+# Post Msg To Toy
+POST {{BASE_URL_LOCAL}}/api/toy/68c017003fbd8cbb8b2e494f/msg
+Content-Type: application/json
+
+# {
+#     "sendFrom":"username",
+#     "msg":"xxx",
+#     "createdAt":"222"
+# }
+
+###
+
+# Delete Msg To Toy
+
+# DELETE {{BASE_URL_LOCAL}}/api/toy/68c017003fbd8cbb8b2e494f/msg
+
+###
+

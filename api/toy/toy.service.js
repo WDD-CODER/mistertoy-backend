@@ -78,7 +78,7 @@ async function update(toy) {
 	// ולשמור על הדאטהץ תיד עדיף שנעשה עוד משהו קל לוודא שהמוצר שאנחנו עובדים אליו הוא מה שאנחנו מצפים 
 	try {
 		const toyToSave = {
-			vendor: toy.vendor,
+			txt: toy.txt,
 			price: toy.price,
 		}
 		const collection = await dbService.getCollection('toy')

@@ -1,0 +1,39 @@
+@BASE_URL_LOCAL = http://localhost:3030
+@USER_ID = 68c27bdd5ee5bab7d6fbd2a6
+
+# Get Users
+GET {{BASE_URL_LOCAL}}/api/user
+
+###
+
+# Get User By Id
+
+GET {{BASE_URL_LOCAL}}/api/user/{{USER_ID}}
+
+###
+
+# Update User
+
+Put {{BASE_URL_LOCAL}}/api/user/{{USER_ID}}
+Content-Type: application/json
+
+{
+ "_id": "{{USER_ID}}",
+  "username": "vc",
+  "fullname": "d w",
+  "score": 600
+}
+
+
+###
+
+# POST {{BASE_URL_LOCAL}}/api/user/
+# Content-Type: application/json
+
+# {
+# "username": "user.username",
+# "password": "user.password",
+# "fullname": "user.fullname",
+# "score": 0
+# }
+
