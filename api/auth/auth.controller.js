@@ -26,7 +26,9 @@ export async function signup(req, res) {
         // logger.debug(fullname + ', ' + username + ', ' + password)
         
         const account = await authService.signup(username, password, fullname)
-        logger.debug(`auth.route - new account created: ` + JSON.stringify(account))
+        const noPasswordAccount = {username: account.username ,fullname: account.fullname,}
+        console.log("🚀 ~ signup ~ noPasswordAccount:", noPasswordAccount)
+        logger.debug(`auth.route - new account created: ` + JSON.stringify(noPasswordAccount))
         
         const user = await authService.login(username, password)
         const loginToken = authService.getLoginToken(user)

@@ -27,7 +27,7 @@ export async function getToyById(req, res) {
 
 export async function addToy(req, res) {
     const { loggedinUser } = req
-
+// פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
         const toy = req.body
         toy.owner = loggedinUser
@@ -40,6 +40,8 @@ export async function addToy(req, res) {
 }
 
 export async function updateToy(req, res) {
+    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
+
     try {
         const toy = { ...req.body, _id: req.params.id }
         const updatedToy = await toyService.update(toy)
@@ -51,6 +53,8 @@ export async function updateToy(req, res) {
 }
 
 export async function removeToy(req, res) {
+    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
+
     try {
         const toyId = req.params.id
         const deletedCount = await toyService.remove(toyId)
@@ -63,6 +67,7 @@ export async function removeToy(req, res) {
 
 export async function addToyMsg(req, res) {
     const { loggedinUser } = req
+    // אנחנו לא נרצה להעביר את כל המידע של היוזר בהודעה אנחנו נרצה רק להעביר מיני יוזר עם מידע רלוונטי בלבד
     try {
         const toyId = req.params.id
         const msg = {

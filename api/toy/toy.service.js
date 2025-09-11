@@ -15,11 +15,15 @@ export const toyService = {
 }
 
 async function query(filterBy = { txt: '' }) {
+	// כאן אני צריך להעביר את זה לשפה של מונגו בכדי לשוח אותו ב"חכה" לבקשת שרת
+	// את הפונקציה שתמיר את הפילטר אני עושה בסרויס של הצעצוע שם אני מנהל את השפה של מונגו גם 
+	// אנחנו נעביר את כמות הדפים קדימה בכדי שנועל להשתמש בזה בפרונט 
 	try {
 		const criteria = {
 			vendor: { $regex: filterBy.txt, $options: 'i' },
 		}
 		const collection = await dbService.getCollection('toy')
+		// var toys = await collection.find(criteria).toArray()
 		var toys = await collection.find({}).toArray()
 		return toys
 	} catch (err) {
@@ -52,6 +56,12 @@ async function remove(toyId) {
 }
 
 async function add(toy) {
+	// אנחנו בונים פה בעצם את האובייקט שנרצה לקבל. אני צריך לזכור שבשלב הזה כאילו אין לי 
+	// ערכים של צעצעוים. אז אני צריך לבנות אותם בדרך.
+	//  לדאוג שמשתמש שמוסיף יוסיף את הפרטים שלו כי זה חובה ומעבר לזה אני צריך להכניס את הנתונים הושים שמעניינים אותי.
+	// גם כאן אנחנו רוצים להגן יש לנו את כל הנתונים המחייבים ואם לא לא לאפשר ליוזר לבצע את הפעולה!
+	// בדוגמא של שרון הוא בעצם מפרק לכל הרכיבים שצריכים להיות באבייקט ועושה למה שלא מחייב 
+	// =[] ואז מה שהוע עושה זה ממש לבנות אוביקט בשם הרצוי שלו מחדש 
 	try {
 		const collection = await dbService.getCollection('toy')
 		await collection.insertOne(toy)
@@ -63,6 +73,9 @@ async function add(toy) {
 }
 
 async function update(toy) {
+	// כאן אני גם מבצע עוב בדיקה כמו בקודם רק מוודא גם שיש תעודת זהות כי זה חייב להיות בפעולה מסוג זה. 
+	// שרון מדגיש שזה יוטר עבודה דפנסיבית בבקאנד כי אנחנו רוצים לשמור שהוא לא יפול 
+	// ולשמור על הדאטהץ תיד עדיף שנעשה עוד משהו קל לוודא שהמוצר שאנחנו עובדים אליו הוא מה שאנחנו מצפים 
 	try {
 		const toyToSave = {
 			vendor: toy.vendor,

@@ -19,7 +19,9 @@ async function query(filterBy = {}) {
 		var users = await collection.find(criteria).sort({ nickname: -1 }).toArray()
 		users = users.map(user => {
 			delete user.password
-			user.isHappy = true
+			// כאן שרון משתמש בסינטקס שבחיפוש מוסיפים את הפרוגקשן כפרמטר נוסף ואז אפשר 
+
+			user.isHappy = true //  פה זה דוגמא להוספה של ערך שלא היה קיים קודם!
 			user.createdAt = user._id.getTimestamp()
 			return user
 		})
@@ -115,7 +117,7 @@ function _buildCriteria(filterBy) {
 			},
 		]
 	}
-	if (filterBy.minBalance) {
+	if (filterBy.minPrice) {
 		criteria.balance = { $gte: filterBy.minBalance }
 	}
 	return criteria
