@@ -14,17 +14,15 @@ export const toyService = {
 	removeToyMsg,
 }
 
-async function query(filterBy = { txt: '' }) {
+async function query(filterBy = { name: '' }) {
 	// כאן אני צריך להעביר את זה לשפה של מונגו בכדי לשוח אותו ב"חכה" לבקשת שרת
 	// את הפונקציה שתמיר את הפילטר אני עושה בסרויס של הצעצוע שם אני מנהל את השפה של מונגו גם 
 	// אנחנו נעביר את כמות הדפים קדימה בכדי שנועל להשתמש בזה בפרונט 
 	try {
-		const criteria = {
-			vendor: { $regex: filterBy.txt, $options: 'i' },
-		}
+		const criteria = _buildCriteria(filterBy)
 		const collection = await dbService.getCollection('toy')
 		// var toys = await collection.find(criteria).toArray()
-		var toys = await collection.find({}).toArray()
+		var toys = await collection.find(criteria).toArray()
 		return toys
 	} catch (err) {
 		logger.error('cannot find toys', err)
@@ -73,12 +71,13 @@ async function add(toy) {
 }
 
 async function update(toy) {
+	console.log("🚀 ~ update ~ toy:", toy)
 	// כאן אני גם מבצע עוב בדיקה כמו בקודם רק מוודא גם שיש תעודת זהות כי זה חייב להיות בפעולה מסוג זה. 
 	// שרון מדגיש שזה יוטר עבודה דפנסיבית בבקאנד כי אנחנו רוצים לשמור שהוא לא יפול 
 	// ולשמור על הדאטהץ תיד עדיף שנעשה עוד משהו קל לוודא שהמוצר שאנחנו עובדים אליו הוא מה שאנחנו מצפים 
 	try {
 		const toyToSave = {
-			txt: toy.txt,
+			name: toy.name,
 			price: toy.price,
 		}
 		const collection = await dbService.getCollection('toy')
@@ -114,3 +113,21 @@ async function removeToyMsg(toyId, msgId) {
 	}
 }
 
+function _buildCriteria(filterBy) {
+	const criteria = {}
+	if (filterBy.name) {
+		const txtCriteria = { $regex: filterBy.name, $options: 'i' }
+		criteria.$or = [
+			{
+				name: txtCriteria,
+			},
+			// {
+			// 	fullname: txtCriteria,
+			// },
+		]
+	}
+	// if (filterBy.minPrice) {
+	// 	criteria.balance = { $gte: filterBy.minBalance }
+	// }
+	return criteria
+}

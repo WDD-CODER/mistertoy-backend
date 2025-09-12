@@ -1,6 +1,6 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68c26e89d746eda5767d2ba4
+@TOY_ID = 68c3bf4bd54d955b33bee10b
 
 # Get Toys
 GET  {{BASE_URL_LOCAL}}/api/toy
@@ -17,7 +17,7 @@ POST   {{BASE_URL_LOCAL}}/api/toy/
 Content-Type: application/json
 
 {
-  "txt": "New Demo toy",
+  "name": "New Demo toy",
   "imgUrl": "",
   "price": 10000
 }
@@ -27,20 +27,11 @@ Content-Type: application/json
 # Put Toy
 // לקחת בחשבון שהוא מעדכן בהתאם לשדות האפשריים שהפקדתי לפונקציה בסרוויס!
 PUT {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
+Content-Type: application/json
 
 {
-  "txt": "Updated Demo toy",
-  "imgUrl": "",
-  "price": 1,
-  "labels": [],
-  "inStock": true,
-  "color": "#FEDF5A",
-  "sales": [
-    {
-      "date": "15/10",
-      "amount": 339
-    }
-  ]
+  "name": "Updated Demo toy",
+  "price": 1
 }
 
 

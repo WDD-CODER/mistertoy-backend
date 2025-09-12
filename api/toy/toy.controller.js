@@ -4,7 +4,7 @@ import { logger } from '../../services/logger.service.js'
 export async function getToys(req, res) {
     try {
         const filterBy = {
-            txt: req.query.txt || '',
+            name: req.query.name || '',
         }
         const toys = await toyService.query(filterBy)
         res.json(toys)
@@ -27,9 +27,12 @@ export async function getToyById(req, res) {
 
 export async function addToy(req, res) {
     const { loggedinUser } = req
-// פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
+    const toy = req.body
+    if (toy.name) {
+        
+    }
+    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
-        const toy = req.body
         toy.owner = loggedinUser
         const addedToy = await toyService.add(toy)
         res.json(addedToy)
@@ -40,10 +43,11 @@ export async function addToy(req, res) {
 }
 
 export async function updateToy(req, res) {
-    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
 
+    const { name, price, labels, inStock, color, sales } = req.body
+    const toy = { name, price, labels, inStock, color, sales }
+    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
-        const toy = { ...req.body, _id: req.params.id }
         const updatedToy = await toyService.update(toy)
         res.json(updatedToy)
     } catch (err) {
@@ -53,6 +57,7 @@ export async function updateToy(req, res) {
 }
 
 export async function removeToy(req, res) {
+    console.log("🚀 ~ removeToy ~ removeToy:")
     // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
 
     try {
@@ -71,7 +76,7 @@ export async function addToyMsg(req, res) {
     try {
         const toyId = req.params.id
         const msg = {
-            txt: req.body.txt,
+            name: req.body.name,
             by: loggedinUser,
             createdAt: Date.now(),
         }
