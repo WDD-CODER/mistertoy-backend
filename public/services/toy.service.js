@@ -18,12 +18,12 @@ export const toyService = {
 window.cs = toyService
 
 
-async function query(filterBy = { txt: '', price: 0 }) {
+async function query(filterBy = { name: '', price: 0 }) {
     return httpService.get(STORAGE_KEY, filterBy)
 
     // var toys = await storageService.query(STORAGE_KEY)
-    // if (filterBy.txt) {
-    //     const regex = new RegExp(filterBy.txt, 'i')
+    // if (filterBy.name) {
+    //     const regex = new RegExp(filterBy.name, 'i')
     //     toys = toys.filter(toy => regex.test(toy.vendor) || regex.test(toy.description))
     // }
     // if (filterBy.price) {
@@ -56,18 +56,18 @@ async function save(toy) {
     return savedToy
 }
 
-async function addToyMsg(toyId, txt) {
+async function addToyMsg(toyId, name) {
     // const toy = await getById(toyId)
     // if (!toy.msgs) toy.msgs = []
 
     // const msg = {
     //     id: utilService.makeId(),
     //     by: userService.getLoggedinUser(),
-    //     txt
+    //     name
     // }
     // toy.msgs.push(msg)
     // await storageService.put(STORAGE_KEY, toy)    
-    const savedMsg = await httpService.post(`toy/${toyId}/msg`, {txt})
+    const savedMsg = await httpService.post(`toy/${toyId}/msg`, {name})
     return savedMsg
 }
 

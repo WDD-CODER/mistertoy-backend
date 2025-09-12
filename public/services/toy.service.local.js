@@ -16,11 +16,11 @@ export const toyService = {
 window.cs = toyService
 
 
-async function query(filterBy = { txt: '', price: 0 }) {
+async function query(filterBy = { name: '', price: 0 }) {
     var toys = await storageService.query(STORAGE_KEY)
-    if (filterBy.txt) {
-        const regex = new RegExp(filterBy.txt, 'i')
-        toys = toys.filter(toy => regex.test(toy.vendor) || regex.test(toy.description))
+    if (filterBy.name) {
+        const regex = new RegExp(filterBy.name, 'i')
+        toys = toys.filter(toy => regex.test(toy.name) || regex.test(toy.description))
     }
     if (filterBy.price) {
         toys = toys.filter(toy => toy.price <= filterBy.price)
