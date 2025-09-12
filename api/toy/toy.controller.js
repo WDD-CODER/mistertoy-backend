@@ -27,10 +27,11 @@ export async function getToyById(req, res) {
 
 export async function addToy(req, res) {
     const { loggedinUser } = req
-    const toy = req.body
-    if (toy.name) {
-        
-    }
+
+    const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
+    if (!name || !price) res.status(400).send('Missing data')
+    const toy = { name, price, labels, inStock, color, sales }
+
     // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
         toy.owner = loggedinUser
@@ -43,9 +44,10 @@ export async function addToy(req, res) {
 }
 
 export async function updateToy(req, res) {
+    const { name, price, labels = [], inStock = true, color, sales = [], _id } = req.body
+    if (!name || !price || !_id) res.status(400).send('Missing data')
+    const toy = { name, price, labels, inStock, color, sales, _id }
 
-    const { name, price, labels, inStock, color, sales } = req.body
-    const toy = { name, price, labels, inStock, color, sales }
     // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
         const updatedToy = await toyService.update(toy)
@@ -57,7 +59,6 @@ export async function updateToy(req, res) {
 }
 
 export async function removeToy(req, res) {
-    console.log("🚀 ~ removeToy ~ removeToy:")
     // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
 
     try {

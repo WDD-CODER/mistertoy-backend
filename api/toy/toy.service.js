@@ -46,7 +46,7 @@ async function remove(toyId) {
 	try {
 		const collection = await dbService.getCollection('toy')
 		const { deletedCount } = await collection.deleteOne({ _id: ObjectId.createFromHexString(toyId) })
-        return deletedCount
+		return deletedCount
 	} catch (err) {
 		logger.error(`cannot remove toy ${toyId}`, err)
 		throw err
@@ -54,6 +54,7 @@ async function remove(toyId) {
 }
 
 async function add(toy) {
+
 	// אנחנו בונים פה בעצם את האובייקט שנרצה לקבל. אני צריך לזכור שבשלב הזה כאילו אין לי 
 	// ערכים של צעצעוים. אז אני צריך לבנות אותם בדרך.
 	//  לדאוג שמשתמש שמוסיף יוסיף את הפרטים שלו כי זה חובה ומעבר לזה אני צריך להכניס את הנתונים הושים שמעניינים אותי.
@@ -71,15 +72,19 @@ async function add(toy) {
 }
 
 async function update(toy) {
-	console.log("🚀 ~ update ~ toy:", toy)
 	// כאן אני גם מבצע עוב בדיקה כמו בקודם רק מוודא גם שיש תעודת זהות כי זה חייב להיות בפעולה מסוג זה. 
 	// שרון מדגיש שזה יוטר עבודה דפנסיבית בבקאנד כי אנחנו רוצים לשמור שהוא לא יפול 
 	// ולשמור על הדאטהץ תיד עדיף שנעשה עוד משהו קל לוודא שהמוצר שאנחנו עובדים אליו הוא מה שאנחנו מצפים 
 	try {
+		const { name, price, labels, inStock } = toy
 		const toyToSave = {
-			name: toy.name,
-			price: toy.price,
+			name,
+			price,
+			labels,
+			inStock
 		}
+		console.log("🚀 ~ update ~ toyToSave:", toyToSave)
+
 		const collection = await dbService.getCollection('toy')
 		await collection.updateOne({ _id: ObjectId.createFromHexString(toy._id) }, { $set: toyToSave })
 		return toy
@@ -105,7 +110,7 @@ async function addToyMsg(toyId, msg) {
 async function removeToyMsg(toyId, msgId) {
 	try {
 		const collection = await dbService.getCollection('toy')
-		await collection.updateOne({ _id: ObjectId.createFromHexString(toyId) }, { $pull: { msgs: { id: msgId }}})
+		await collection.updateOne({ _id: ObjectId.createFromHexString(toyId) }, { $pull: { msgs: { id: msgId } } })
 		return msgId
 	} catch (err) {
 		logger.error(`cannot add toy msg ${toyId}`, err)
