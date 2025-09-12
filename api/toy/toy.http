@@ -1,6 +1,6 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68c3bf4bd54d955b33bee10b
+@TOY_ID = 68c3e22c8fd096cf7a9d2cb2
 
 # Get Toys
 GET  {{BASE_URL_LOCAL}}/api/toy
@@ -17,10 +17,21 @@ POST   {{BASE_URL_LOCAL}}/api/toy/
 Content-Type: application/json
 
 {
-  "name": "New Demo toy",
-  "imgUrl": "",
-  "price": 10000
-}
+    "name": "demo toy",
+    "imgUrl": "",
+    "price": 175,
+    "labels": [],
+    "inStock": "",
+    "color": "#963767",
+    "sales": [
+      { "date": "15/10", "amount": 150 },
+      { "date": "30/10", "amount": 255 },
+      { "date": "15/11", "amount": 500 },
+      { "date": "30/11", "amount": 220 },
+      { "date": "15/12", "amount": 100 },
+      { "date": "30/12", "amount": 600 }
+    ],
+    }
 
 ### 
 
@@ -29,10 +40,21 @@ Content-Type: application/json
 PUT {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
 Content-Type: application/json
 
-{
-  "name": "Updated Demo toy",
-  "price": 1
-}
+ {
+    "_id": "68c3cc8ed54d955b33bee116",
+    "name": "Galactic Glider",
+    "imgUrl": "",
+    "price": 175,
+    "labels": [],
+    "inStock": "",
+    "color": "#963767",
+    "sales": [
+      {
+        "date": "15/10",
+        "amount": 80
+      }
+    ]
+  }
 
 
 
