@@ -19,7 +19,7 @@ async function query(filterBy = { name: '' }) {
 	// את הפונקציה שתמיר את הפילטר אני עושה בסרויס של הצעצוע שם אני מנהל את השפה של מונגו גם 
 	// אנחנו נעביר את כמות הדפים קדימה בכדי שנועל להשתמש בזה בפרונט 
 	try {
-		const criteria = _buildCriteria(filterBy)
+		const  criteria = _buildCriteria(filterBy)
 		const collection = await dbService.getCollection('toy')
 		// var toys = await collection.find(criteria).toArray()
 		var toys = await collection.find(criteria).toArray()
@@ -72,9 +72,6 @@ async function add(toy) {
 }
 
 async function update(toy) {
-	// כאן אני גם מבצע עוב בדיקה כמו בקודם רק מוודא גם שיש תעודת זהות כי זה חייב להיות בפעולה מסוג זה. 
-	// שרון מדגיש שזה יוטר עבודה דפנסיבית בבקאנד כי אנחנו רוצים לשמור שהוא לא יפול 
-	// ולשמור על הדאטהץ תיד עדיף שנעשה עוד משהו קל לוודא שהמוצר שאנחנו עובדים אליו הוא מה שאנחנו מצפים 
 	try {
 		const { name, price, labels, inStock } = toy
 		const toyToSave = {
@@ -83,8 +80,6 @@ async function update(toy) {
 			labels,
 			inStock
 		}
-		console.log("🚀 ~ update ~ toyToSave:", toyToSave)
-
 		const collection = await dbService.getCollection('toy')
 		await collection.updateOne({ _id: ObjectId.createFromHexString(toy._id) }, { $set: toyToSave })
 		return toy
@@ -119,20 +114,24 @@ async function removeToyMsg(toyId, msgId) {
 }
 
 function _buildCriteria(filterBy) {
-	const criteria = {}
-	if (filterBy.name) {
-		const txtCriteria = { $regex: filterBy.name, $options: 'i' }
-		criteria.$or = [
-			{
-				name: txtCriteria,
-			},
-			// {
-			// 	fullname: txtCriteria,
-			// },
-		]
-	}
-	// if (filterBy.minPrice) {
-	// 	criteria.balance = { $gte: filterBy.minBalance }
-	// }
+	
+		var criteria = {}
+
+		if (filterBy.name) {
+			criteria.name = { $regex: filterBy.name, $options: 'i' }
+		}
+
+		if (filterBy.inStock) {
+			criteria.inStock = JSON.parse(filterBy.inStock)
+		}
+
+		if (filterBy.labels && filterBy.labels.length) {
+			criteria.labels = { $all: filterBy.labels }
+		}
+
+		if (filterBy.price) {
+			criteria.price = { $gte: filterBy.price }
+		}
+	
 	return criteria
 }
