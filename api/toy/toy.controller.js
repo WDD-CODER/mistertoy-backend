@@ -4,16 +4,18 @@ import { logger } from '../../services/logger.service.js'
 export async function getToys(req, res) {
 
     try {
-        const { name, price,labels, inStock, sortBy, sortDir } = req.query
-                
+        const { name, price, labels, inStock, sortBy, pageIdx, sortDir } = req.query
+
         const filterBy = {
             name: name || '',
             price: +price || 0,
             inStock: inStock || '',
             labels: labels || [],
-            sortBy: sortBy || { type: '', sortDir: 1 }
-
+            sortBy: sortBy,
+            pageIdx: +pageIdx || 0,
+            sortDir: (sortDir === 'false') ? -1 : 1
         }
+
         const toys = await toyService.query(filterBy)
         res.json(toys)
     } catch (err) {
@@ -37,7 +39,7 @@ export async function addToy(req, res) {
     const { loggedinUser } = req
 
     const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
-    if (!name || !price) res.status(400).send('Missing data')
+    if (!name || !price) return res.status(400).send('Missing data')
     const toy = { name, price, labels, inStock, color, sales }
 
     // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
