@@ -4,6 +4,8 @@ import { dbService } from '../../services/db.service.js'
 import { logger } from '../../services/logger.service.js'
 import { utilService } from '../../services/util.service.js'
 
+const PAGE_SIZE = 4
+
 export const toyService = {
 	remove,
 	query,
@@ -15,18 +17,21 @@ export const toyService = {
 }
 
 async function query(filterBy = { name: '' }) {
-	// כאן אני צריך להעביר את זה לשפה של מונגו בכדי לשוח אותו ב"חכה" לבקשת שרת
-	// את הפונקציה שתמיר את הפילטר אני עושה בסרויס של הצעצוע שם אני מנהל את השפה של מונגו גם 
-	// אנחנו נעביר את כמות הדפים קדימה בכדי שנועל להשתמש בזה בפרונט 
 	try {
-		const  criteria = _buildCriteria(filterBy)
+		const { filterCriteria, sortCriteria, skip } = _buildCriteria(filterBy)
+
 		const collection = await dbService.getCollection('toy')
-		// var toys = await collection.find(criteria).toArray()
-		var toys = await collection.find(criteria).toArray()
-		return toys
-	} catch (err) {
-		logger.error('cannot find toys', err)
-		throw err
+		const prmTotalCount = collection.countDocuments(filterCriteria)
+
+		const prmFilteredToys = collection
+			.find(filterCriteria, { sort: sortCriteria, skip, limit: PAGE_SIZE }).toArray()
+
+		const [totalCount, filteredToys] = await Promise.all([prmTotalCount, prmFilteredToys])
+		const maxPage = Math.ceil(totalCount / PAGE_SIZE)
+		return { toys: filteredToys, maxPage }
+	} catch (error) {
+		logger.error('cannot find toys', error)
+		throw error
 	}
 }
 
@@ -54,14 +59,9 @@ async function remove(toyId) {
 }
 
 async function add(toy) {
-
-	// אנחנו בונים פה בעצם את האובייקט שנרצה לקבל. אני צריך לזכור שבשלב הזה כאילו אין לי 
-	// ערכים של צעצעוים. אז אני צריך לבנות אותם בדרך.
-	//  לדאוג שמשתמש שמוסיף יוסיף את הפרטים שלו כי זה חובה ומעבר לזה אני צריך להכניס את הנתונים הושים שמעניינים אותי.
-	// גם כאן אנחנו רוצים להגן יש לנו את כל הנתונים המחייבים ואם לא לא לאפשר ליוזר לבצע את הפעולה!
-	// בדוגמא של שרון הוא בעצם מפרק לכל הרכיבים שצריכים להיות באבייקט ועושה למה שלא מחייב 
-	// =[] ואז מה שהוע עושה זה ממש לבנות אוביקט בשם הרצוי שלו מחדש 
 	try {
+		toy.createdAt = Date.now()
+		toy.inStock = true
 		const collection = await dbService.getCollection('toy')
 		await collection.insertOne(toy)
 		return toy
@@ -114,24 +114,34 @@ async function removeToyMsg(toyId, msgId) {
 }
 
 function _buildCriteria(filterBy) {
-	
-		var criteria = {}
 
-		if (filterBy.name) {
-			criteria.name = { $regex: filterBy.name, $options: 'i' }
-		}
+	var filterCriteria = {}
 
-		if (filterBy.inStock) {
-			criteria.inStock = JSON.parse(filterBy.inStock)
-		}
+	if (filterBy.name) {
+		filterCriteria.name = { $regex: filterBy.name, $options: 'i' }
+	}
 
-		if (filterBy.labels && filterBy.labels.length) {
-			criteria.labels = { $all: filterBy.labels }
-		}
+	if (filterBy.inStock) {
+		filterCriteria.inStock = JSON.parse(filterBy.inStock)
+	}
 
-		if (filterBy.price) {
-			criteria.price = { $gte: filterBy.price }
-		}
-	
-	return criteria
+	if (filterBy.labels && filterBy.labels.length) {
+		filterCriteria.labels = { $all: filterBy.labels }
+	}
+
+	if (filterBy.price) {
+		filterCriteria.price = { $gte: filterBy.price }
+	}
+
+	const sortCriteria = {}
+
+	if (filterBy.sortBy) {
+		sortCriteria[filterBy.sortBy] = filterBy.sortDir || 1;
+	} else {
+		sortCriteria.createdAt = -1;
+	}
+
+	const skip = filterBy.pageIdx !== undefined ? filterBy.pageIdx * PAGE_SIZE : 0
+
+	return { filterCriteria, sortCriteria, skip }
 }
