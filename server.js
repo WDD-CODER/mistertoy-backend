@@ -15,6 +15,7 @@ const app = express()
 // Express App Config
 app.use(cookieParser())
 app.use(express.json())
+app.set('query parser', 'extended')
 app.use(express.static('public'))
 
 if (process.env.NODE_ENV === 'production') {

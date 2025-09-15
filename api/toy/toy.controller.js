@@ -4,21 +4,13 @@ import { logger } from '../../services/logger.service.js'
 export async function getToys(req, res) {
 
     try {
-        const { name, price, inStock, sortBy, sortDir } = req.query
-
-        // לא מבין מה הקטע!! משומ מה לא הצלחי לפתור את זה בלי זה. 
-        // בזבתי שעות וכל הזמן קיבלתי בבק 'labels[]': 
-        // במקום לקבל ארת מה שאני צריך 'labels'
-        // למה זה קרה!!??
-        
-        const labels = req.query['labels[]'] || [];
-        const labelsArray = Array.isArray(labels) ? labels : [labels];
-
+        const { name, price,labels, inStock, sortBy, sortDir } = req.query
+                
         const filterBy = {
             name: name || '',
             price: +price || 0,
             inStock: inStock || '',
-            labels: labelsArray || [],
+            labels: labels || [],
             sortBy: sortBy || { type: '', sortDir: 1 }
 
         }

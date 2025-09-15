@@ -87,13 +87,14 @@ async function add(user) {
 		// Validate that there are no such user:
 		const existUser = await getByUsername(user.username)
 		if (existUser) throw new Error('Username taken')
+			console.log('add in userService')
 
 		// peek only updatable fields!
 		const userToAdd = {
 			username: user.username,
 			password: user.password,
 			fullname: user.fullname,
-			score: user.score || 0,
+			// score: user.score || 0,
 		}
 		const collection = await dbService.getCollection('user')
 		await collection.insertOne(userToAdd)
