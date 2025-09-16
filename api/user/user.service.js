@@ -14,14 +14,12 @@ export const userService = {
 
 async function query(filterBy = {}) {
 	const criteria = _buildCriteria(filterBy)
+	const projection = {password:0}
 	try {
 		const collection = await dbService.getCollection('user')
-		var users = await collection.find(criteria).sort({ nickname: -1 }).toArray()
+		var users = await collection.find(criteria,{projection}).sort({ nickname: -1 }).toArray()
 		users = users.map(user => {
-			delete user.password
-			// כאן שרון משתמש בסינטקס שבחיפוש מוסיפים את הפרוגקשן כפרמטר נוסף ואז אפשר 
-
-			user.isHappy = true //  פה זה דוגמא להוספה של ערך שלא היה קיים קודם!
+			// user.isAdmin = true //  פה זה דוגמא להוספה של ערך שלא היה קיים קודם!
 			user.createdAt = user._id.getTimestamp()
 			return user
 		})
@@ -71,7 +69,7 @@ async function update(user) {
 			_id: ObjectId.createFromHexString(user._id),
 			username: user.username,
 			fullname: user.fullname,
-			score: user.score,
+			isAdmin: user.isAdmin,
 		}
 		const collection = await dbService.getCollection('user')
 		await collection.updateOne({ _id: userToSave._id }, { $set: userToSave })
@@ -94,6 +92,7 @@ async function add(user) {
 			username: user.username,
 			password: user.password,
 			fullname: user.fullname,
+			isAdmin: user.isAdmin,
 			// score: user.score || 0,
 		}
 		const collection = await dbService.getCollection('user')
@@ -107,8 +106,8 @@ async function add(user) {
 
 function _buildCriteria(filterBy) {
 	const criteria = {}
-	if (filterBy.name) {
-		const txtCriteria = { $regex: filterBy.name, $options: 'i' }
+	if (filterBy.username) {
+		const txtCriteria = { $regex: filterBy.username, $options: 'i' }
 		criteria.$or = [
 			{
 				username: txtCriteria,
@@ -118,8 +117,8 @@ function _buildCriteria(filterBy) {
 			},
 		]
 	}
-	if (filterBy.minPrice) {
-		criteria.balance = { $gte: filterBy.minBalance }
-	}
+	  if (filterBy.isAdmin) {
+        criteria.isAdmin = true;
+    }
 	return criteria
 }
