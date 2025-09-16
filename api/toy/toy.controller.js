@@ -36,6 +36,8 @@ export async function getToyById(req, res) {
 }
 
 export async function addToy(req, res) {
+    console.log('addToy')
+    
     const { loggedinUser } = req
 
     const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
