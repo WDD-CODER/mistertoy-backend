@@ -1,5 +1,5 @@
 @BASE_URL_LOCAL = http://localhost:3030
-@USER_ID = 68c27bdd5ee5bab7d6fbd2a6
+@USER_ID = 68c948b142ceebbfe8ea6987
 
 # Get Users
 GET {{BASE_URL_LOCAL}}/api/user
@@ -24,6 +24,11 @@ Content-Type: application/json
   "score": 600
 }
 
+
+###
+# Remove User
+
+Delete {{BASE_URL_LOCAL}}/api/user/{{USER_ID}}
 
 ###
 

@@ -19,7 +19,7 @@ async function query(filterBy = {}) {
 		const collection = await dbService.getCollection('user')
 		var users = await collection.find(criteria,{projection}).sort({ nickname: -1 }).toArray()
 		users = users.map(user => {
-			// user.isAdmin = true //  פה זה דוגמא להוספה של ערך שלא היה קיים קודם!
+		//NOTE 	// user.isAdmin = true //  פה זה דוגמא להוספה של ערך שלא היה קיים קודם!
 			user.createdAt = user._id.getTimestamp()
 			return user
 		})

@@ -42,7 +42,6 @@ export async function addToy(req, res) {
     if (!name || !price) return res.status(400).send('Missing data')
     const toy = { name, price, labels, inStock, color, sales }
 
-    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
         toy.owner = loggedinUser
         const addedToy = await toyService.add(toy)
@@ -57,8 +56,6 @@ export async function updateToy(req, res) {
     const { name, price, labels = [], inStock = true, color, sales = [], _id } = req.body
     if (!name || !price || !_id) res.status(400).send('Missing data')
     const toy = { name, price, labels, inStock, color, sales, _id }
-
-    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
     try {
         const updatedToy = await toyService.update(toy)
         res.json(updatedToy)
@@ -69,10 +66,9 @@ export async function updateToy(req, res) {
 }
 
 export async function removeToy(req, res) {
-    // פה אני צריך לפרק את הצעצוע בלבד! זה שומר על בטיחות שלא אקבל מכונית והוא יחשוב שזה צעצוע
 
     try {
-        const toyId = req.params.id
+        const toyId = req.params.id        
         const deletedCount = await toyService.remove(toyId)
         res.send(`${deletedCount} toys removed`)
     } catch (err) {

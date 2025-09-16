@@ -32,7 +32,7 @@ export async function signup(req, res) {
         const user = await authService.login(username, password)
         const loginToken = authService.getLoginToken(user)
 
-        //TODO  אני לא מצליח לקבל את השיגעה לקאטץ זה עובר לי רק בהודעה של שגיעה דרך ה httpService 
+        //FIXME  אני לא מצליח לקבל את השיגעה לקאטץ זה עובר לי רק בהודעה של שגיעה דרך ה httpService 
         res.cookie('loginToken', loginToken)
         res.json(user)
     } catch (err) {

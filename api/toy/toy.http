@@ -1,6 +1,6 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68c3e22c8fd096cf7a9d2cb2
+@TOY_ID = 68c7e584e853716bddab4c82
 
 # Get Toys
 GET  {{BASE_URL_LOCAL}}/api/toy
