@@ -4,20 +4,7 @@ import { logger } from '../../services/logger.service.js'
 export async function getReviews(req, res) {
 
     try {
-        const {byUserId, toyId, txt } = req.query
-        console.log("🚀 ~ getReviews ~ req.query:", req.query)
-
-        const filterBy = {
-            byUserId: byUserId || '',
-            toyId: toyId || '',
-            txt: txt || '',
-            // labels: labels || [],
-            // sortBy: sortBy,
-            // pageIdx: +pageIdx || 0,
-            // sortDir: (sortDir === 'false') ? -1 : 1
-        }
-
-        const reviews = await reviewService.query(filterBy)
+        const reviews = await reviewService.query(req.query)
         console.log("🚀 ~ getReviews ~ reviews:", reviews)
         res.json(reviews)
     } catch (err) {

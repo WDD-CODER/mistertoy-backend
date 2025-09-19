@@ -12,13 +12,13 @@ export const reviewService = {
 	add,
 }
 
-async function query(filterBy = { name: '' }) {
+async function query(filter={}) {
 	try {
 		// const criteria = _buildCriteria(filterBy)
 
 		const collection = await dbService.getCollection('review')
 
-return collection
+return 
 	} catch (error) {
 		logger.error('cannot find reviews', error)
 		throw error
