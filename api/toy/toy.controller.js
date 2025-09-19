@@ -36,11 +36,10 @@ export async function getToyById(req, res) {
 }
 
 export async function addToy(req, res) {
-    console.log('addToy')
-    
     const { loggedinUser } = req
 
     const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
+    //QUESTION במקרה הזה ההגנה עובדת אם אין שם אבל אני לא מקבל אינפורמציה לגבי מה קרה בפועל. איך אני דואג להעביר את המידע הזה?
     if (!name || !price) return res.status(400).send('Missing data')
     const toy = { name, price, labels, inStock, color, sales }
 
@@ -80,20 +79,24 @@ export async function removeToy(req, res) {
 }
 
 export async function addToyMsg(req, res) {
+    console.log("🚀 ~ addToyMsg ~ addToyMsg:")
     const { loggedinUser } = req
     // אנחנו לא נרצה להעביר את כל המידע של היוזר בהודעה אנחנו נרצה רק להעביר מיני יוזר עם מידע רלוונטי בלבד
     try {
+        console.log("🚀 ~ addToyMsg ~ req.body:", req.body)
         const toyId = req.params.id
         const msg = {
-            name: req.body.name,
+            txt: req.body.txt,
             by: loggedinUser,
             createdAt: Date.now(),
         }
         const savedMsg = await toyService.addToyMsg(toyId, msg)
+        console.log(`Add message ${savedMsg.id} to toy.`)
+        
         res.json(savedMsg)
     } catch (err) {
-        logger.error('Failed to update toy', err)
-        res.status(500).send({ err: 'Failed to update toy' })
+        logger.error('Failed to Add Msg To Toy', err)
+        res.status(500).send({ err: 'Failed to Add Msg To Toy' })
     }
 }
 

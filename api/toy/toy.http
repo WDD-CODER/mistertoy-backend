@@ -1,6 +1,7 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68c7e584e853716bddab4c82
+@TOY_ID = 68cc044b25f76af0ba9d11ef
+
 
 # Get Toys
 GET  {{BASE_URL_LOCAL}}/api/toy
@@ -33,6 +34,19 @@ Content-Type: application/json
     ]
     }
 
+### 
+# Post Toy Msg
+POST   {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}/msg
+Content-Type: application/json
+# toyRoutes.post('/:id/msg', requireAuth, addToyMsg)
+
+ { 
+  "id": "68cbfc0b40ed579bbe058be3",
+  "txt":" I love you, baby. ",
+  "by": {
+        "_id": "loggedinUser?._id" ,
+        "fullname":" loggedinUser.fullname"
+  }}
 ### 
 
 # Put Toy

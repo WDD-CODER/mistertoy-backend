@@ -92,7 +92,6 @@ async function update(toy) {
 async function addToyMsg(toyId, msg) {
 	try {
 		msg.id = utilService.makeId()
-
 		const collection = await dbService.getCollection('toy')
 		await collection.updateOne({ _id: ObjectId.createFromHexString(toyId) }, { $push: { msgs: msg } })
 		return msg

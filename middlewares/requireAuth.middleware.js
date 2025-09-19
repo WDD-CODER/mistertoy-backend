@@ -2,7 +2,7 @@ import { logger } from '../services/logger.service.js'
 import { authService } from '../api/auth/auth.service.js'
 
 export async function requireAuth(req, res, next) {
-        
+        //LEARN כאן נשתמש במידלאאוור ששומר את המשתמש setupeAsyncLoaclStorage
     if (!req?.cookies?.loginToken) {
         return res.status(401).send('Not Authenticated')
     }

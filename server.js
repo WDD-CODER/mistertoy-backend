@@ -17,7 +17,7 @@ app.use(cookieParser())
 app.use(express.json())
 app.set('query parser', 'extended')
 app.use(express.static('public'))
-
+//LEARN פה מיישמים את המתודה של שימוש במשתנים סביבתיים
 if (process.env.NODE_ENV === 'production') {
     // Express serve static files on production environment
     app.use(express.static(path.resolve(__dirname, 'public')))
@@ -46,6 +46,8 @@ import { toyRoutes } from './api/toy/toy.routes.js'
 app.use('/api/auth', authRoutes)
 app.use('/api/user', userRoutes)
 app.use('/api/toy', toyRoutes)
+
+//LEARN להשתמש פה במידלוואר setupeAsyncLoaclStorage
 
 // Make every unmatched server-side-route fall back to index.html
 // So when requesting http://localhost:3030/index.html/toy/123 it will still respond with
