@@ -1,26 +1,18 @@
 import { logger } from '../services/logger.service.js'
 import { authService } from '../api/auth/auth.service.js'
+import { asyncLocalStorage } from '../services/als.service.js'
 
 export async function requireAuth(req, res, next) {
-        //LEARN כאן נשתמש במידלאאוור ששומר את המשתמש setupeAsyncLoaclStorage
-    if (!req?.cookies?.loginToken) {
-        return res.status(401).send('Not Authenticated')
-    }
-    
-    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+    const { loggedinUser } = asyncLocalStorage.getStore()
     if (!loggedinUser) return res.status(401).send('Not Authenticated')
 
     req.loggedinUser = loggedinUser
-    
+
     next()
 }
 
 export async function requireAdmin(req, res, next) {
-    if (!req?.cookies?.loginToken) {
-        return res.status(401).send('Not Authenticated')
-    }
-
-    const loggedinUser = authService.validateToken(req.cookies.loginToken)
+    const { loggedinUser } = asyncLocalStorage.getStore()
     // פה הוספנו ? בכדי לוודא שזה לא ישבר כי אין לוגדאין יוזר
     if (!loggedinUser?.isAdmin) {
         logger.warn(loggedinUser.fullname + 'attempted to perform admin action')

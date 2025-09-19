@@ -25,7 +25,7 @@ export async function getReviewById(req, res) {
 }
 
 export async function addReview(req, res) {
-    const { loggedinUser } = req
+
 
         const { byUserId, toyId, txt } = req.body
     //QUESTION במקרה הזה ההגנה עובדת אם אין שם אבל אני לא מקבל אינפורמציה לגבי מה קרה בפועל. איך אני דואג להעביר את המידע הזה?
@@ -69,7 +69,6 @@ export async function removeReview(req, res) {
 }
 
 export async function addReviewMsg(req, res) {
-    const { loggedinUser } = req
     // אנחנו לא נרצה להעביר את כל המידע של היוזר בהודעה אנחנו נרצה רק להעביר מיני יוזר עם מידע רלוונטי בלבד
     try {
         const reviewId = req.params.id
@@ -89,10 +88,8 @@ export async function addReviewMsg(req, res) {
 }
 
 export async function removeReviewMsg(req, res) {
-    // const { loggedinUser } = req
+   
     try {
-        // const reviewId = req.params.id
-        // const { msgId } = req.params
         const { id: reviewId, msgId } = req.params
 
         const removedId = await reviewService.removeReviewMsg(reviewId, msgId)
