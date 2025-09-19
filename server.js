@@ -41,6 +41,11 @@ if (process.env.NODE_ENV === 'production') {
 import { authRoutes } from './api/auth/auth.routes.js'
 import { userRoutes } from './api/user/user.routes.js'
 import { toyRoutes } from './api/toy/toy.routes.js'
+import { setupAsyncLocalStorage } from './middlewares/setupAls.middlewere.js'
+
+
+app.all('*', setupAsyncLocalStorage)
+
 
 // routes
 app.use('/api/auth', authRoutes)
