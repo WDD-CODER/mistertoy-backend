@@ -17,5 +17,6 @@ toyRoutes.delete('/:id', requireAuth, removeToy)
 
 // toyRoutes.post('/:id/msg', addToyMsg)
 toyRoutes.post('/:id/msg', requireAuth, addToyMsg)
+//FIXME לטפל ביכולת להוריד 
 // toyRoutes.delete('/:id/msg/:msgId', requireAuth, removeToyMsg)
 

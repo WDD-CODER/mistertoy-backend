@@ -4,12 +4,13 @@ import { logger } from '../../services/logger.service.js'
 export async function getReviews(req, res) {
 
     try {
-        // const {_id, userId, reviewId, txt } = req.query
+        const {byUserId, toyId, txt } = req.query
+        console.log("🚀 ~ getReviews ~ req.query:", req.query)
 
         const filterBy = {
-            userId: userId || '',
-            reviewId: reviewId || '',
-            txt: inStock || '',
+            byUserId: byUserId || '',
+            toyId: toyId || '',
+            txt: txt || '',
             // labels: labels || [],
             // sortBy: sortBy,
             // pageIdx: +pageIdx || 0,
@@ -17,6 +18,7 @@ export async function getReviews(req, res) {
         }
 
         const reviews = await reviewService.query(filterBy)
+        console.log("🚀 ~ getReviews ~ reviews:", reviews)
         res.json(reviews)
     } catch (err) {
         logger.error('Failed to get reviews', err)
@@ -38,13 +40,12 @@ export async function getReviewById(req, res) {
 export async function addReview(req, res) {
     const { loggedinUser } = req
 
-    const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
+        const { byUserId, toyId, txt } = req.body
     //QUESTION במקרה הזה ההגנה עובדת אם אין שם אבל אני לא מקבל אינפורמציה לגבי מה קרה בפועל. איך אני דואג להעביר את המידע הזה?
-    if (!name || !price) return res.status(400).send('Missing data')
-    const review = { name, price, labels, inStock, color, sales }
+    if (!byUserId || !toyId || !txt) return res.status(400).send('Missing data')
+    const review = { byUserId, toyId, txt }
 
     try {
-        review.owner = loggedinUser
         const addedReview = await reviewService.add(review)
         res.json(addedReview)
     } catch (err) {
@@ -53,18 +54,20 @@ export async function addReview(req, res) {
     }
 }
 
-export async function updateReview(req, res) {
-    const { name, price, labels = [], inStock = true, color, sales = [], _id } = req.body
-    if (!name || !price || !_id) res.status(400).send('Missing data')
-    const review = { name, price, labels, inStock, color, sales, _id }
-    try {
-        const updatedReview = await reviewService.update(review)
-        res.json(updatedReview)
-    } catch (err) {
-        logger.error('Failed to update review', err)
-        res.status(500).send({ err: 'Failed to update review' })
-    }
-}
+// export async function updateReview(req, res) {
+//     console.log('updateReview')
+    
+//     const { name, price, labels = [], inStock = true, color, sales = [], _id } = req.body
+//     if (!name || !price || !_id) res.status(400).send('Missing data')
+//     const review = { name, price, labels, inStock, color, sales, _id }
+//     try {
+//         const updatedReview = await reviewService.update(review)
+//         res.json(updatedReview)
+//     } catch (err) {
+//         logger.error('Failed to update review', err)
+//         res.status(500).send({ err: 'Failed to update review' })
+//     }
+// }
 
 export async function removeReview(req, res) {
 
@@ -79,11 +82,9 @@ export async function removeReview(req, res) {
 }
 
 export async function addReviewMsg(req, res) {
-    console.log("🚀 ~ addReviewMsg ~ addReviewMsg:")
     const { loggedinUser } = req
     // אנחנו לא נרצה להעביר את כל המידע של היוזר בהודעה אנחנו נרצה רק להעביר מיני יוזר עם מידע רלוונטי בלבד
     try {
-        console.log("🚀 ~ addReviewMsg ~ req.body:", req.body)
         const reviewId = req.params.id
         const msg = {
             txt: req.body.txt,

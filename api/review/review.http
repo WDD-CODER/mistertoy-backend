@@ -1,102 +1,33 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68cc044b25f76af0ba9d11ef
+@REVIEW_ID = 68cd1c81d5f016f102fbb828
 
 
-# Get Toys
-GET  {{BASE_URL_LOCAL}}/api/toy
+# Get Reviews
+GET  {{BASE_URL_LOCAL}}/api/review
 
 ###  
-# Get Toy By Id
+# Get Review By Id
 
-GET  {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
+GET  {{BASE_URL_LOCAL}}/api/review/{{REVIEW_ID}}
 
 ### 
 
-# Post Toy
-POST   {{BASE_URL_LOCAL}}/api/toy/
-Content-Type: application/json
+# Post Review
+POST   {{BASE_URL_LOCAL}}/api/review/
+Content-Type: application/json 
 
 {
-    "name": "demo toy",
-    "imgUrl": "",
-    "price": 175,
-    "labels": [],
-    "inStock": "",
-    "color": "#963767",
-    "sales": [
-      { "date": "15/10", "amount": 150 },
-      { "date": "30/10", "amount": 255 },
-      { "date": "15/11", "amount": 500 },
-      { "date": "30/11", "amount": 220 },
-      { "date": "15/12", "amount": 100 },
-      { "date": "30/12", "amount": 600 }
-    ]
-    }
-
-### 
-# Post Toy Msg
-POST   {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}/msg
-Content-Type: application/json
-# toyRoutes.post('/:id/msg', requireAuth, addToyMsg)
-
- { 
-  "id": "68cbfc0b40ed579bbe058be3",
-  "txt":" I love you, baby. ",
-  "by": {
-        "_id": "loggedinUser?._id" ,
-        "fullname":" loggedinUser.fullname"
-  }}
-### 
-
-# Put Toy
-// לקחת בחשבון שהוא מעדכן בהתאם לשדות האפשריים שהפקדתי לפונקציה בסרוויס!
-PUT {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
-Content-Type: application/json
-
- {
-    "_id": "68c3eb11a00b85b15ffd37b7",
-    "name": "Galactic Glider",
-    "imgUrl": "",
-    "price": 10000,
-    "labels": ["ärt"],
-    "inStock": "",
-    "color": "#963767",
-    "sales": [
-      {
-        "date": "15/10",
-        "amount": 80
-      }
-    ]
-  }
-
+ "byUserId": "5b507e97f20dd52bb6e67a44",
+ "toyId": "5b4f0b081043ae5f9cf3494c",
+ "txt": "Best toy ever!"
+}
 
 
 ###
-# Delete Toy
+# Delete Review
 
-DELETE  {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}
-
-###
-
-
-// Toy Msg Api's
-
-# Post Msg To Toy
-POST {{BASE_URL_LOCAL}}/api/toy/68c017003fbd8cbb8b2e494f/msg
-Content-Type: application/json
-
-# {
-#     "sendFrom":"username",
-#     "msg":"xxx",
-#     "createdAt":"222"
-# }
-
-###
-
-# Delete Msg To Toy
-
-# DELETE {{BASE_URL_LOCAL}}/api/toy/68c017003fbd8cbb8b2e494f/msg
+DELETE  {{BASE_URL_LOCAL}}/api/review/{{REVIEW_ID}}
 
 ###
 
