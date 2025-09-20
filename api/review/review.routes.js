@@ -9,12 +9,7 @@ export const reviewRoutes = express.Router()
 // router.use(requireAuth)
 
 reviewRoutes.get('/', log, getReviews)
-// reviewRoutes.get('/:id', getReviewById)
 reviewRoutes.post('/', requireAuth, addReview)
-// reviewRoutes.put('/:id', requireAuth, updateReview)
 reviewRoutes.delete('/:id', requireAuth, removeReview)
 
-// reviewRoutes.post('/:id/msg', addReviewMsg)
-// reviewRoutes.post('/:id/msg', requireAuth, addReviewMsg)
-// reviewRoutes.delete('/:id/msg/:msgId', requireAuth, removeReviewMsg)
 

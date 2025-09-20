@@ -1,5 +1,5 @@
 @BASE_URL_LOCAL = http://localhost:3030
-@USER_ID = 68cc011ebc3c270f9afda563
+@USER_ID = 68ce588b5c9d48e910e6d561
 
 
 # SignUp
@@ -7,10 +7,17 @@ POST {{BASE_URL_LOCAL}}/api/auth/signup
 Content-Type: application/json
 
 {
-    "username": "jjj",
+    "username": "aaa",
     "password": "111",
-    "fullname": "d w"
+    "fullname": "dan wei"
 }
+
+# {
+#     "username": "sss",
+#     "password": "222",
+#     "fullname": "d w"
+# }
+
 
 ###
 
@@ -19,7 +26,7 @@ POST {{BASE_URL_LOCAL}}/api/auth/login
 Content-Type: application/json
 
 {
-    "username": "jjj",
+    "username": "aaa",
     "password": "111"
 }
 

@@ -1,33 +1,38 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@REVIEW_ID = 68cd1c81d5f016f102fbb828
+@REQ_ID = 68ce5d1223069365a092c1b9
+@TOY_ID = 68cd07002d586aa01791e133
+@USER_ID = 68ce588b5c9d48e910e6d561
 
 
 # Get Reviews
-GET  {{BASE_URL_LOCAL}}/api/review
+GET  {{BASE_URL_LOCAL}}/api/review/
 
 ###  
+
+
+
 # Get Review By Id
+# GET  {{BASE_URL_LOCAL}}/api/review/{{REQ_ID}}
 
-GET  {{BASE_URL_LOCAL}}/api/review/{{REVIEW_ID}}
 
-### 
+#### 
+
 
 # Post Review
 POST   {{BASE_URL_LOCAL}}/api/review/
 Content-Type: application/json 
 
 {
- "byUserId": "5b507e97f20dd52bb6e67a44",
- "toyId": "5b4f0b081043ae5f9cf3494c",
- "txt": "Best toy ever!"
+ "aboutToyId": "68cd07002d586aa01791e133",
+ "txt": "hole!"
 }
 
 
 ###
 # Delete Review
 
-DELETE  {{BASE_URL_LOCAL}}/api/review/{{REVIEW_ID}}
+DELETE  {{BASE_URL_LOCAL}}/api/review/{{REQ_ID}}
 
 ###
 

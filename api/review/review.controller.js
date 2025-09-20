@@ -1,11 +1,11 @@
 import { reviewService } from './review.service.js'
 import { logger } from '../../services/logger.service.js'
+import { toyService } from "../toy/toy.service.js";
 
 export async function getReviews(req, res) {
 
     try {
         const reviews = await reviewService.query(req.query)
-        console.log("🚀 ~ getReviews ~ reviews:", reviews)
         res.json(reviews)
     } catch (err) {
         logger.error('Failed to get reviews', err)
@@ -26,38 +26,30 @@ export async function getReviewById(req, res) {
 
 export async function addReview(req, res) {
 
-
-        const { byUserId, toyId, txt } = req.body
-    //QUESTION במקרה הזה ההגנה עובדת אם אין שם אבל אני לא מקבל אינפורמציה לגבי מה קרה בפועל. איך אני דואג להעביר את המידע הזה?
-    if (!byUserId || !toyId || !txt) return res.status(400).send('Missing data')
-    const review = { byUserId, toyId, txt }
+    const { loggedinUser } = req
 
     try {
-        const addedReview = await reviewService.add(review)
-        res.json(addedReview)
+        var review = req.body
+        const { aboutToyId } = review
+        review.byUserId = loggedinUser._id
+        review = await reviewService.add(review)
+        review.byUser = loggedinUser
+        review.aboutToy = await toyService.getById(aboutToyId)
+        review.createdAt = review._id.getTimestamp()
+
+        delete review.aboutToyId
+        delete review.byUserId
+
+        if (!loggedinUser || !aboutToyId || !review.txt) return res.status(400).send('Missing data')
+        res.send(review)
+
     } catch (err) {
         logger.error('Failed to add review', err)
         res.status(500).send({ err: 'Failed to add review' })
     }
 }
 
-// export async function updateReview(req, res) {
-//     console.log('updateReview')
-    
-//     const { name, price, labels = [], inStock = true, color, sales = [], _id } = req.body
-//     if (!name || !price || !_id) res.status(400).send('Missing data')
-//     const review = { name, price, labels, inStock, color, sales, _id }
-//     try {
-//         const updatedReview = await reviewService.update(review)
-//         res.json(updatedReview)
-//     } catch (err) {
-//         logger.error('Failed to update review', err)
-//         res.status(500).send({ err: 'Failed to update review' })
-//     }
-// }
-
 export async function removeReview(req, res) {
-
     try {
         const reviewId = req.params.id
         const deletedCount = await reviewService.remove(reviewId)
@@ -68,34 +60,3 @@ export async function removeReview(req, res) {
     }
 }
 
-export async function addReviewMsg(req, res) {
-    // אנחנו לא נרצה להעביר את כל המידע של היוזר בהודעה אנחנו נרצה רק להעביר מיני יוזר עם מידע רלוונטי בלבד
-    try {
-        const reviewId = req.params.id
-        const msg = {
-            txt: req.body.txt,
-            by: loggedinUser,
-            createdAt: Date.now(),
-        }
-        const savedMsg = await reviewService.addReviewMsg(reviewId, msg)
-        console.log(`Add message ${savedMsg.id} to review.`)
-
-        res.json(savedMsg)
-    } catch (err) {
-        logger.error('Failed to Add Msg To Review', err)
-        res.status(500).send({ err: 'Failed to Add Msg To Review' })
-    }
-}
-
-export async function removeReviewMsg(req, res) {
-   
-    try {
-        const { id: reviewId, msgId } = req.params
-
-        const removedId = await reviewService.removeReviewMsg(reviewId, msgId)
-        res.send(removedId)
-    } catch (err) {
-        logger.error('Failed to remove review msg', err)
-        res.status(500).send({ err: 'Failed to remove review msg' })
-    }
-}
