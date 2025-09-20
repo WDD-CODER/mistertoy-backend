@@ -1,6 +1,6 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68cc044b25f76af0ba9d11ef
+@TOY_ID = 68cd599a8c1ee2f824cd887f
 
 
 # Get Toys
@@ -21,7 +21,7 @@ Content-Type: application/json
     "name": "demo toy",
     "imgUrl": "",
     "price": 175,
-    "labels": [],
+    "labels": ["on-drugs"],
     "inStock": "",
     "color": "#963767",
     "sales": [

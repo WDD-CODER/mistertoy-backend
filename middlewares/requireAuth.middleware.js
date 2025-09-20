@@ -3,7 +3,9 @@ import { authService } from '../api/auth/auth.service.js'
 import { asyncLocalStorage } from '../services/als.service.js'
 
 export async function requireAuth(req, res, next) {
+    
     const { loggedinUser } = asyncLocalStorage.getStore()
+    console.log("🚀 ~ requireAuth ~ loggedinUser:", loggedinUser)
     if (!loggedinUser) return res.status(401).send('Not Authenticated')
 
     req.loggedinUser = loggedinUser
