@@ -22,6 +22,13 @@ if (process.env.NODE_ENV === 'production') {
     // Express serve static files on production environment
     app.use(express.static(path.resolve(__dirname, 'public')))
     console.log('__dirname: ', __dirname)
+
+    //QUESTION לוודא שזה פעולה נכונה!?
+     const corsOptions = {
+        origin: ['https://mistertoy-frontend-u7xp.onrender.com'],
+        credentials: true
+    }
+    app.use(cors(corsOptions))
 } else {
     // Configuring CORS
     // Make sure origin contains the url 
