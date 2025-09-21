@@ -11,10 +11,10 @@ export const toyRoutes = express.Router()
 //TODO להוסיף פה בקשה מיוחדת לקבל את הלייבלים בלבד! מכל הצעצעועים
 toyRoutes.get('/', log, getToys)
 toyRoutes.get('/:id', getToyById)
-toyRoutes.post('/', requireAuth, addToy)
-toyRoutes.put('/:id', requireAuth, updateToy)
-toyRoutes.delete('/:id', requireAuth, removeToy)
+toyRoutes.post('/', requireAdmin, addToy)
+toyRoutes.put('/:id', requireAdmin, updateToy)
+toyRoutes.delete('/:id', requireAdmin, removeToy)
 
 toyRoutes.post('/:id/msg', requireAuth, addToyMsg)
-toyRoutes.delete('/:id/msg/:msgId', requireAuth, removeToyMsg)
+toyRoutes.delete('/:id/msg/:msgId', requireAuth, requireAdmin, removeToyMsg)
 

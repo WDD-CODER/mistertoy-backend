@@ -37,6 +37,7 @@ export async function getToyById(req, res) {
 
 export async function addToy(req, res) {
     const { loggedinUser } = req
+if (!loggedinUser) return res.status(401).send('Missing data')
 
     const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
     //QUESTION במקרה הזה ההגנה עובדת אם אין שם אבל אני לא מקבל אינפורמציה לגבי מה קרה בפועל. איך אני דואג להעביר את המידע הזה?
