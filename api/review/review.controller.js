@@ -3,7 +3,6 @@ import { logger } from '../../services/logger.service.js'
 import { toyService } from "../toy/toy.service.js";
 
 export async function getReviews(req, res) {
-
     try {
         const reviews = await reviewService.query(req.query)
         res.json(reviews)
@@ -41,7 +40,9 @@ export async function addReview(req, res) {
         delete review.byUserId
 
         if (!loggedinUser || !aboutToyId || !review.txt) return res.status(400).send('Missing data')
+       
         res.send(review)
+        console.log(`${review.byUser.fullname}'s Review added`)
 
     } catch (err) {
         logger.error('Failed to add review', err)

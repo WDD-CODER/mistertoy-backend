@@ -1,6 +1,6 @@
 
 @BASE_URL_LOCAL = http://localhost:3030
-@TOY_ID = 68cd599a8c1ee2f824cd887f
+@TOY_ID = 68ce9d29e94dd6de8e4ec378
 
 
 # Get Toys
@@ -96,7 +96,7 @@ Content-Type: application/json
 
 # Delete Msg To Toy
 
-# DELETE {{BASE_URL_LOCAL}}/api/toy/68c017003fbd8cbb8b2e494f/msg
+DELETE {{BASE_URL_LOCAL}}/api/toy/{{TOY_ID}}/msg/DblhH
 
-###
+##
 

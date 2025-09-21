@@ -3,9 +3,8 @@ import { authService } from '../api/auth/auth.service.js'
 import { asyncLocalStorage } from '../services/als.service.js'
 
 export async function requireAuth(req, res, next) {
-    
+
     const { loggedinUser } = asyncLocalStorage.getStore()
-    console.log("🚀 ~ requireAuth ~ loggedinUser:", loggedinUser)
     if (!loggedinUser) return res.status(401).send('Not Authenticated')
 
     req.loggedinUser = loggedinUser
@@ -15,7 +14,6 @@ export async function requireAuth(req, res, next) {
 
 export async function requireAdmin(req, res, next) {
     const { loggedinUser } = asyncLocalStorage.getStore()
-    // פה הוספנו ? בכדי לוודא שזה לא ישבר כי אין לוגדאין יוזר
     if (!loggedinUser?.isAdmin) {
         logger.warn(loggedinUser.fullname + 'attempted to perform admin action')
         res.status(403).end('Not Authorized')

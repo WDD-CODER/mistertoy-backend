@@ -61,7 +61,6 @@ async function remove(toyId) {
 async function add(toy) {
 	try {
 		toy.createdAt = Date.now()
-	//FIXME רק לוודא שזה כבר לא הכרחי.	// toy.inStock = true
 		const collection = await dbService.getCollection('toy')
 		await collection.insertOne(toy)
 		return toy

@@ -24,8 +24,8 @@ POST   {{BASE_URL_LOCAL}}/api/review/
 Content-Type: application/json 
 
 {
- "aboutToyId": "68cd07002d586aa01791e133",
- "txt": "hole!"
+ "aboutToyId": "68ce9d29e94dd6de8e4ec378",
+ "txt": "anothe one!! im done!"
 }
 
 

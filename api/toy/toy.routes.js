@@ -8,15 +8,13 @@ export const toyRoutes = express.Router()
 // middleware that is specific to this router
 // router.use(requireAuth)
 
+//TODO להוסיף פה בקשה מיוחדת לקבל את הלייבלים בלבד! מכל הצעצעועים
 toyRoutes.get('/', log, getToys)
 toyRoutes.get('/:id', getToyById)
-//TODO להוסיף פה בקשה מיוחדת לקבל את הלייבלים בלבד! מכל הצעצעועים
 toyRoutes.post('/', requireAuth, addToy)
 toyRoutes.put('/:id', requireAuth, updateToy)
 toyRoutes.delete('/:id', requireAuth, removeToy)
 
-// toyRoutes.post('/:id/msg', addToyMsg)
 toyRoutes.post('/:id/msg', requireAuth, addToyMsg)
-//FIXME לטפל ביכולת להוריד 
-// toyRoutes.delete('/:id/msg/:msgId', requireAuth, removeToyMsg)
+toyRoutes.delete('/:id/msg/:msgId', requireAuth, removeToyMsg)
 

@@ -16,7 +16,7 @@ export const reviewService = {
 async function query(filterBy = {}) {
 	try {
 		const { loggedinUser } = asyncLocalStorage.getStore()
-		filterBy.byUserId = loggedinUser._id
+		// filterBy.byUserId = loggedinUser._id
 		const criteria = _buildCriteria(filterBy)
 		const collection = await dbService.getCollection('review')
 		var reviewsCurser = await collection.aggregate([
@@ -58,7 +58,6 @@ async function query(filterBy = {}) {
 					'Toy.labels': 0,
 					'Toy.createdAt': 0,
 					'Toy.msgs': 0,
-					// 'Toy.price': 0,
 					'Toy.inStock': 0,
 					'Toy.color': 0,
 					'Toy.sales': 0,
@@ -123,8 +122,8 @@ async function add(review) {
 function _buildCriteria(filterBy) {
 	const criteria = {}
 
-	if (filterBy.byUserId) {
-		criteria.byUserId = ObjectId.createFromHexString(filterBy.byUserId)
+	if (filterBy.aboutToyId) {
+		criteria.aboutToyId = ObjectId.createFromHexString(filterBy.aboutToyId)
 	}
 
 	return criteria
