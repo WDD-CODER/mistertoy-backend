@@ -1,6 +1,7 @@
 import { reviewService } from './review.service.js'
 import { logger } from '../../services/logger.service.js'
 import { toyService } from "../toy/toy.service.js";
+import { socketService } from '../../services/socket.service.js';
 
 export async function getReviews(req, res) {
     try {
@@ -39,8 +40,12 @@ export async function addReview(req, res) {
         delete review.aboutToyId
         delete review.byUserId
 
+        socketService.broadcast({type:'review-added', data:review, userId: loggedinUser._id })
+        socketService.emitTo({type:'review-about-you', data:review, userId:review.aboutToy})
+
+
         if (!loggedinUser || !aboutToyId || !review.txt) return res.status(400).send('Missing data')
-       
+
         res.send(review)
         console.log(`${review.byUser.fullname}'s Review added`)
 

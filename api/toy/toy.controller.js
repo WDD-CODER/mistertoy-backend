@@ -1,5 +1,6 @@
 import { toyService } from './toy.service.js'
 import { logger } from '../../services/logger.service.js'
+import { socketService } from '../../services/socket.service.js'
 
 export async function getToys(req, res) {
 
@@ -37,7 +38,7 @@ export async function getToyById(req, res) {
 
 export async function addToy(req, res) {
     const { loggedinUser } = req
-if (!loggedinUser) return res.status(401).send('Missing data')
+    if (!loggedinUser) return res.status(400).send('Missing data')
 
     const { name, price, labels = [], inStock = true, color, sales = [] } = req.body
     //QUESTION במקרה הזה ההגנה עובדת אם אין שם אבל אני לא מקבל אינפורמציה לגבי מה קרה בפועל. איך אני דואג להעביר את המידע הזה?
@@ -47,6 +48,7 @@ if (!loggedinUser) return res.status(401).send('Missing data')
     try {
         toy.owner = loggedinUser
         const addedToy = await toyService.add(toy)
+        console.log("🚀 ~ addToy ~ addedToy:", addedToy)
         res.json(addedToy)
     } catch (err) {
         logger.error('Failed to add toy', err)
@@ -55,9 +57,17 @@ if (!loggedinUser) return res.status(401).send('Missing data')
 }
 
 export async function updateToy(req, res) {
-    const { name, price, labels = [], inStock = true, color, sales = [], _id } = req.body
+    const { loggedinUser } = req
+
+    console.log("🚀 ~ updateToy ~ req:")
+    const { name, price, labels = [], inStock = true, color, sales = [], _id, msgs = [] } = req.body
     if (!name || !price || !_id) res.status(400).send('Missing data')
-    const toy = { name, price, labels, inStock, color, sales, _id }
+    const toy = { name, price, labels, inStock, color, sales, _id, msgs }
+
+    socketService.broadcast({ type: 'toy-updated', data: toy, userId: loggedinUser._id })
+    socketService.emitTo({ type: 'toy-hes-been-updated!', data: toy, userId: toy._id })
+
+
     try {
         const updatedToy = await toyService.update(toy)
         res.json(updatedToy)
@@ -70,7 +80,7 @@ export async function updateToy(req, res) {
 export async function removeToy(req, res) {
 
     try {
-        const toyId = req.params.id        
+        const toyId = req.params.id
         const deletedCount = await toyService.remove(toyId)
         res.send(`${deletedCount} toys removed`)
     } catch (err) {
@@ -80,21 +90,24 @@ export async function removeToy(req, res) {
 }
 
 export async function addToyMsg(req, res) {
-    console.log("🚀 ~ addToyMsg ~ addToyMsg:")
     const { loggedinUser } = req
     // אנחנו לא נרצה להעביר את כל המידע של היוזר בהודעה אנחנו נרצה רק להעביר מיני יוזר עם מידע רלוונטי בלבד
     try {
-        console.log("🚀 ~ addToyMsg ~ req.body:", req.body)
         const toyId = req.params.id
+        console.log("🚀 ~ addToyMsg ~ toyId:", toyId)
+        console.log("🚀 ~ addToyMsg ~  req.body:", req.body)
         const msg = {
             txt: req.body.txt,
             by: loggedinUser,
             createdAt: Date.now(),
         }
-        const savedMsg = await toyService.addToyMsg(toyId, msg)
-        console.log(`Add message ${savedMsg.id} to toy.`)
-        
-        res.json(savedMsg)
+        const toy = await toyService.addToyMsg(toyId, msg)
+        console.log(`Add message To  ${toy.name} toy.`)
+
+        socketService.broadcast({ type: 'toy-updated', data: toy, userId: loggedinUser._id })
+        socketService.emitTo({ type: 'toy-hes-been-updated!', data: toy, userId: toy._id })
+
+        res.json(toy)
     } catch (err) {
         logger.error('Failed to Add Msg To Toy', err)
         res.status(500).send({ err: 'Failed to Add Msg To Toy' })

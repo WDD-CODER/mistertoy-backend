@@ -92,8 +92,10 @@ async function addToyMsg(toyId, msg) {
 	try {
 		msg.id = utilService.makeId()
 		const collection = await dbService.getCollection('toy')
-		await collection.updateOne({ _id: ObjectId.createFromHexString(toyId) }, { $push: { msgs: msg } })
-		return msg
+		 await collection.updateOne({ _id: ObjectId.createFromHexString(toyId) }, { $push: { msgs: msg } })
+		const updatedToy = await collection.findOne({ _id: ObjectId.createFromHexString(toyId) })
+
+		return updatedToy
 	} catch (err) {
 		logger.error(`cannot add toy msg ${toyId}`, err)
 		throw err
