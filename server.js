@@ -1,22 +1,33 @@
-import express  from 'express'
+import express from 'express'
 import cookieParser from 'cookie-parser'
-import cors  from 'cors'
+import cors from 'cors'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
+import http from 'http'
+import { Server } from 'socket.io'
+import { authRoutes } from './api/auth/auth.routes.js'
+import { userRoutes } from './api/user/user.routes.js'
+import { toyRoutes } from './api/toy/toy.routes.js'
+import { reviewRoutes } from './api/review/review.routes.js'
+import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
+import { createServer } from 'http'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
 import { logger } from './services/logger.service.js'
+import { setupSocketAPI } from './services/socket.service.js'
 logger.info('server.js loaded...')
 
 const app = express()
+const server = http.createServer(app)
 
 // Express App Config
 app.use(cookieParser())
 app.use(express.json())
 app.set('query parser', 'extended')
 app.use(express.static('public'))
+
 //LEARN פה מיישמים את המתודה של שימוש במשתנים סביבתיים
 if (process.env.NODE_ENV === 'production') {
     // Express serve static files on production environment
@@ -24,20 +35,21 @@ if (process.env.NODE_ENV === 'production') {
     console.log('__dirname: ', __dirname)
 
     //QUESTION לוודא שזה פעולה נכונה!?
-     const corsOptions = {
+    const corsOptions = {
         origin: ['https://mistertoy-frontend-u7xp.onrender.com'],
         credentials: true
     }
     app.use(cors(corsOptions))
+
 } else {
     // Configuring CORS
     // Make sure origin contains the url 
     // your frontend dev-server is running on
     const corsOptions = {
         origin: [
-            'http://127.0.0.1:5173', 
+            'http://127.0.0.1:5173',
             'http://localhost:5173',
-            'http://127.0.0.1:3000', 
+            'http://127.0.0.1:3000',
             'http://localhost:3000',
         ],
         credentials: true
@@ -45,11 +57,6 @@ if (process.env.NODE_ENV === 'production') {
     app.use(cors(corsOptions))
 }
 
-import { authRoutes } from './api/auth/auth.routes.js'
-import { userRoutes } from './api/user/user.routes.js'
-import { toyRoutes } from './api/toy/toy.routes.js'
-import { reviewRoutes } from './api/review/review.routes.js'
-import { setupAsyncLocalStorage } from './middlewares/setupAls.middleware.js'
 
 
 app.all('/*all', setupAsyncLocalStorage)
@@ -61,6 +68,7 @@ app.use('/api/user', userRoutes)
 app.use('/api/toy', toyRoutes)
 app.use('/api/review', reviewRoutes)
 
+setupSocketAPI(server)
 //LEARN להשתמש פה במידלוואר setupeAsyncLoaclStorage
 
 // Make every unmatched server-side-route fall back to index.html
@@ -73,6 +81,6 @@ app.get('/*all', (req, res) => {
 
 const port = process.env.PORT || 3030
 
-app.listen(port, () => {
+server.listen(port, () => {
     logger.info('Server is running on port: ' + port)
 })
