@@ -27,7 +27,7 @@ async function query(filterBy = {}) {
 					from: 'toy',
 					foreignField: '_id',
 					localField: 'aboutToyId',
-					as: 'Toy',
+					as: 'toy',
 					pipeline: [
 						// { $set: { _id: '$_id' } },
 						// { $unset: ['_id'] }
@@ -35,7 +35,7 @@ async function query(filterBy = {}) {
 
 				}
 			},
-			{ $unwind: '$Toy' },
+			{ $unwind: '$toy' },
 			{
 				$lookup: {
 					from: 'user',
@@ -55,13 +55,13 @@ async function query(filterBy = {}) {
 				$project: {
 					byUserId: 0,
 					aboutToyId: 0,
-					'Toy.labels': 0,
-					'Toy.createdAt': 0,
-					'Toy.msgs': 0,
-					'Toy.inStock': 0,
-					'Toy.color': 0,
-					'Toy.sales': 0,
-					'Toy.owner': 0,
+					'toy.labels': 0,
+					'toy.createdAt': 0,
+					'toy.msgs': 0,
+					'toy.inStock': 0,
+					'toy.color': 0,
+					'toy.sales': 0,
+					'toy.owner': 0,
 					'user.username': 0,
 					'user.isAdmin': 0,
 				}
@@ -124,6 +124,9 @@ function _buildCriteria(filterBy) {
 
 	if (filterBy.aboutToyId) {
 		criteria.aboutToyId = ObjectId.createFromHexString(filterBy.aboutToyId)
+	}
+	if (filterBy.byUserId) {
+		criteria.byUserId = ObjectId.createFromHexString(filterBy.byUserId)
 	}
 
 	return criteria
