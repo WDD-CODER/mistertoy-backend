@@ -16,8 +16,8 @@ export async function requireAdmin(req, res, next) {
     const { loggedinUser } = asyncLocalStorage.getStore()
     if (!loggedinUser?.isAdmin) {
         logger.warn(loggedinUser.fullname + 'attempted to perform admin action')
-        res.status(403).end('Not Authorized')
-        return
+        return res.status(403).end('Not Authorized')
     }
+    req.loggedinUser = loggedinUser
     next()
 }
