@@ -40,8 +40,8 @@ export async function addReview(req, res) {
         delete review.aboutToyId
         delete review.byUserId
 
-        socketService.broadcast({type:'review-added', data:review, userId: loggedinUser._id })
-        socketService.emitTo({type:'review-about-you', data:review, userId:review.aboutToy})
+        socketService.broadcast({ type: 'review-added', data: review, userId: loggedinUser._id })
+        // socketService.emitToUser({ type: 'review-about-you', data: review, userId: loggedinUser._id })
 
 
         if (!loggedinUser || !aboutToyId || !review.txt) return res.status(400).send('Missing data')
@@ -56,9 +56,15 @@ export async function addReview(req, res) {
 }
 
 export async function removeReview(req, res) {
+    const { loggedinUser } = req
+
     try {
         const reviewId = req.params.id
         const deletedCount = await reviewService.remove(reviewId)
+
+        socketService.broadcast({ type: 'review-removed', data: reviewId, userId: loggedinUser._id })
+        // socketService.emitToUser({ type: 'review-about-you-removed', data: reviewId, userId: loggedinUser._id })
+
         res.send(`${deletedCount} reviews removed`)
     } catch (err) {
         logger.error('Failed to remove review', err)

@@ -34,7 +34,8 @@ if (process.env.NODE_ENV === 'production') {
     app.use(express.static(path.resolve(__dirname, 'public')))
     console.log('__dirname: ', __dirname)
 
-    //QUESTION לוודא שזה פעולה נכונה!?
+    //QUESTION  לוודא שזה פעולה נכונה!?
+    // אני לא בטוח שאני צריך פעמיים את הקורז-אופציונס והאם החיבור הראשון הוא בסדר או שאני צריך להוסיף עוד אפשרויות כמו במקרה למטה?
     const corsOptions = {
         origin: ['https://mistertoy-frontend-u7xp.onrender.com'],
         credentials: true
